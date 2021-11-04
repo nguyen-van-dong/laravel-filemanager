@@ -59,5 +59,6 @@
       ],
       "aliases": {}
     }
-  }
+  },
+  "minimum-stability": "2.4.0"
 }
