@@ -191,7 +191,7 @@ class Lfm
      */
     public function allowShareFolder()
     {
-        if (! $this->allowMultiUser()) {
+        if (!$this->allowMultiUser()) {
             return true;
         }
 
@@ -257,101 +257,137 @@ class Lfm
      */
     public static function routes()
     {
-        $middleware = [ CreateDefaultFolder::class, MultiUser::class ];
-        $as = 'unisharp.lfm.';
-        $namespace = '\\UniSharp\\LaravelFilemanager\\Controllers\\';
+        Route::get('/', [LfmController::class, 'show',])->name('unisharp.lfm.show');
+        Route::get('/errors', [LfmController::class, 'getErrors',])->name('unisharp.lfm.getErrors');
+        Route::any('/upload', [\UniSharp\LaravelFilemanager\Controllers\UploadController::class, 'upload'])->name('unisharp.lfm.upload');
+        Route::get('/jsonitems', [\UniSharp\LaravelFilemanager\Controllers\ItemsController::class, 'getItems'])->name('unisharp.lfm.getItems');
 
-        Route::group(compact('middleware', 'as', 'namespace'), function () {
+        Route::get('/move', [ItemsController::class, 'move',])->name('unisharp.lfm..move');
 
-            // display main layout
-            Route::get('/', [
-                'uses' => 'LfmController@show',
-                'as' => 'show',
-            ]);
+        Route::get('/domove', [ItemsController::class, 'domove'])->name('unisharp.lfm.domove');
 
-            // display integration error messages
-            Route::get('/errors', [
-                'uses' => 'LfmController@getErrors',
-                'as' => 'getErrors',
-            ]);
+        // folders
+        Route::get('/newfolder', [\UniSharp\LaravelFilemanager\Controllers\FolderController::class, 'getAddfolder',])->name('unisharp.lfm.getAddfolder');
 
-            // upload
-            Route::any('/upload', [
-                'uses' => 'UploadController@upload',
-                'as' => 'upload',
-            ]);
+        // list folders
+        oute::get('/folders', [\UniSharp\LaravelFilemanager\Controllers\FolderController::class, 'getFolders',])->name('unisharp.lfm.getFolders');
 
-            // list images & files
-            Route::get('/jsonitems', [
-                'uses' => 'ItemsController@getItems',
-                'as' => 'getItems',
-            ]);
+        // crop
+        Route::get('/crop', [\UniSharp\LaravelFilemanager\Controllers\CropController::class, 'getCrop'])->name('unisharp.lfm.getCrop');
 
-            Route::get('/move', [
-                'uses' => 'ItemsController@move',
-                'as' => 'move',
-            ]);
+        Route::get('/cropimage', [\UniSharp\LaravelFilemanager\Controllers\CropController::class, 'getCropimage',])->name('unisharp.lfm..getCropimage');
+        Route::get('/cropnewimage', [\UniSharp\LaravelFilemanager\Controllers\CropController::class, 'getNewCropimage',])->name('unisharp.lfm.getCropnewimage');
 
-            Route::get('/domove', [
-                'uses' => 'ItemsController@domove',
-                'as' => 'domove'
-            ]);
+        // rename
+        Route::get('/rename', [\UniSharp\LaravelFilemanager\Controllers\RenameController::class, 'getRename',])->name('unisharp.lfm.getRename');
 
-            // folders
-            Route::get('/newfolder', [
-                'uses' => 'FolderController@getAddfolder',
-                'as' => 'getAddfolder',
-            ]);
+        // scale/resize
+        Route::get('/resize', [\UniSharp\LaravelFilemanager\Controllers\ResizeController::class, 'getResize',])->name('unisharp.lfm.getResize');
+        Route::get('/doresize', [\UniSharp\LaravelFilemanager\Controllers\ResizeController::class, 'performResize',])->name('unisharp.lfm.performResize');
 
-            // list folders
-            Route::get('/folders', [
-                'uses' => 'FolderController@getFolders',
-                'as' => 'getFolders',
-            ]);
+        // download
+        Route::get('/download', [\UniSharp\LaravelFilemanager\Controllers\DownloadController::class, 'getDownload',])->name('unisharp.lfm.getDownload');
 
-            // crop
-            Route::get('/crop', [
-                'uses' => 'CropController@getCrop',
-                'as' => 'getCrop',
-            ]);
-            Route::get('/cropimage', [
-                'uses' => 'CropController@getCropimage',
-                'as' => 'getCropimage',
-            ]);
-            Route::get('/cropnewimage', [
-                'uses' => 'CropController@getNewCropimage',
-                'as' => 'getCropnewimage',
-            ]);
+        // delete
+        Route::get('/delete', [\UniSharp\LaravelFilemanager\Controllers\DeleteController::class, 'getDelete',])->name('unisharp.lfm.getDelete');
 
-            // rename
-            Route::get('/rename', [
-                'uses' => 'RenameController@getRename',
-                'as' => 'getRename',
-            ]);
+        Route::get('/demo', 'DemoController@index');
 
-            // scale/resize
-            Route::get('/resize', [
-                'uses' => 'ResizeController@getResize',
-                'as' => 'getResize',
-            ]);
-            Route::get('/doresize', [
-                'uses' => 'ResizeController@performResize',
-                'as' => 'performResize',
-            ]);
+        // $middleware = [ CreateDefaultFolder::class, MultiUser::class ];
+        // $as = 'unisharp.lfm.';
+        // $namespace = '\\UniSharp\\LaravelFilemanager\\Controllers\\';
 
-            // download
-            Route::get('/download', [
-                'uses' => 'DownloadController@getDownload',
-                'as' => 'getDownload',
-            ]);
+        // Route::group(compact('middleware', 'as', 'namespace'), function () {
 
-            // delete
-            Route::get('/delete', [
-                'uses' => 'DeleteController@getDelete',
-                'as' => 'getDelete',
-            ]);
+        //     // display main layout
+        //     Route::get('/', [
+        //         'uses' => 'LfmController@show',
+        //         'as' => 'show',
+        //     ]);
 
-            Route::get('/demo', 'DemoController@index');
-        });
+        //     // display integration error messages
+        //     Route::get('/errors', [
+        //         'uses' => 'LfmController@getErrors',
+        //         'as' => 'getErrors',
+        //     ]);
+
+        //     // upload
+        //     Route::any('/upload', [
+        //         'uses' => 'UploadController@upload',
+        //         'as' => 'upload',
+        //     ]);
+
+        //     // list images & files
+        //     Route::get('/jsonitems', [
+        //         'uses' => 'ItemsController@getItems',
+        //         'as' => 'getItems',
+        //     ]);
+
+        //     Route::get('/move', [
+        //         'uses' => 'ItemsController@move',
+        //         'as' => 'move',
+        //     ]);
+
+        //     Route::get('/domove', [
+        //         'uses' => 'ItemsController@domove',
+        //         'as' => 'domove'
+        //     ]);
+
+        //     // folders
+        //     Route::get('/newfolder', [
+        //         'uses' => 'FolderController@getAddfolder',
+        //         'as' => 'getAddfolder',
+        //     ]);
+
+        //     // list folders
+        //     Route::get('/folders', [
+        //         'uses' => 'FolderController@getFolders',
+        //         'as' => 'getFolders',
+        //     ]);
+
+        //     // crop
+        //     Route::get('/crop', [
+        //         'uses' => 'CropController@getCrop',
+        //         'as' => 'getCrop',
+        //     ]);
+        //     Route::get('/cropimage', [
+        //         'uses' => 'CropController@getCropimage',
+        //         'as' => 'getCropimage',
+        //     ]);
+        //     Route::get('/cropnewimage', [
+        //         'uses' => 'CropController@getNewCropimage',
+        //         'as' => 'getCropnewimage',
+        //     ]);
+
+        //     // rename
+        //     Route::get('/rename', [
+        //         'uses' => 'RenameController@getRename',
+        //         'as' => 'getRename',
+        //     ]);
+
+        //     // scale/resize
+        //     Route::get('/resize', [
+        //         'uses' => 'ResizeController@getResize',
+        //         'as' => 'getResize',
+        //     ]);
+        //     Route::get('/doresize', [
+        //         'uses' => 'ResizeController@performResize',
+        //         'as' => 'performResize',
+        //     ]);
+
+        //     // download
+        //     Route::get('/download', [
+        //         'uses' => 'DownloadController@getDownload',
+        //         'as' => 'getDownload',
+        //     ]);
+
+        //     // delete
+        //     Route::get('/delete', [
+        //         'uses' => 'DeleteController@getDelete',
+        //         'as' => 'getDelete',
+        //     ]);
+
+        //     Route::get('/demo', 'DemoController@index');
+        // });
     }
 }
